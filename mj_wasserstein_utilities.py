@@ -92,8 +92,6 @@ def mj1_distance(x,y):
 # MJ-Wasserstein Code
 def mj_wasserstein(ts1_cutpoints, ts1_probabilities, ts1_max_probability, ts2_cutpoints, ts2_probabilities, ts2_max_probability):
 
-    # industrials is TS1
-    # Communications is TS2
     values_x = []
     indices_x = []
     probabilities_distributions_x = []
@@ -149,14 +147,43 @@ def mj_wasserstein(ts1_cutpoints, ts1_probabilities, ts1_max_probability, ts2_cu
 
     return mj1_wasserstein_distance
 
+
+def changepoint_probabilities_plot(df):
+    n_segments = df['n_segments'].iloc[0]
+    map_segments = df.loc[df['n_segments'] == n_segments]
+    cutpoints = []
+    probabilities = []
+    max_prob_cutpoint = []
+
+    for i in range(1, n_segments):
+        cutpoint_x = map_segments.loc[map_segments['segment'] == i]
+        cutpoint_locations = cutpoint_x['cut_point']
+        cutpoint_weights = cutpoint_x['probability']
+
+        # Convert to arrays
+        cutpoint_locations_array = np.array(cutpoint_locations)
+        cutpoint_weights_array = np.array(cutpoint_weights)
+
+        # Compute MAP cutpoint
+        max_probability_index = np.argmax(cutpoint_weights_array)
+        map_cutpoint = cutpoint_locations_array[max_probability_index]
+
+        # Append up to lists
+        cutpoints.append(cutpoint_locations_array.flatten())
+        probabilities.append(cutpoint_weights_array.flatten())
+        max_prob_cutpoint.append(map_cutpoint.flatten())
+
+    return cutpoints, probabilities, max_prob_cutpoint
+
 def changepoint_probabilities(df):
     n_segments = df['n_segments'].iloc[0]
     map_segments = df.loc[df['n_segments'] == n_segments]
     cutpoints = []
     probabilities = []
     max_prob_cutpoint = []
-    for i in range(1,n_segments):
-        cutpoint_x = map_segments.loc[map_segments['segment'] == i]
+
+    for i in range(n_segments):
+        cutpoint_x = map_segments.loc[map_segments['segment'] == i+1]
         cutpoint_locations = cutpoint_x['cut_point']
         cutpoint_weights = cutpoint_x['probability']
 
