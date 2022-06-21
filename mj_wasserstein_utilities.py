@@ -155,6 +155,7 @@ def changepoint_probabilities_plot(df):
     probabilities = []
     max_prob_cutpoint = []
 
+    # loop over from 1 this is a comment for github test
     for i in range(1, n_segments):
         cutpoint_x = map_segments.loc[map_segments['segment'] == i]
         cutpoint_locations = cutpoint_x['cut_point']
