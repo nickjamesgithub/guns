@@ -114,3 +114,17 @@ washington_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspe
 west_virginia_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/West.Virginia_post_estimates.csv")
 wisconsin_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wisconsin_post_estimates.csv")
 wyoming_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wyoming_post_estimates.csv")
+
+# Set Labels Pre #todo add pre-labels
+states_pre = [alabama_pre, alaska_pre, arizona_pre, arkansas_pre, california_pre, colorado_pre, connecticut_pre, delaware_pre, dc_pre, florida_pre, georgia_pre,
+          hawaii_pre, idaho_pre, illinois_pre, indiana_pre, iowa_pre, kansas_pre, kentucky_pre, louisiana_pre, maine_pre, maryland_pre, massachusetts_pre,
+          michigan_pre, minnesota_pre, mississippi_pre, missouri_pre, montana_pre, nebraska_pre, nevada_pre, new_hampshire_pre, new_jersey_pre, new_mexico_pre,
+          new_york_pre, north_carolina_pre, north_dakota_pre, ohio_pre, oklahoma_pre, oregon_pre, pennsylvania_pre, rhode_island_pre, south_carolina_pre,
+          south_dakota_pre, tennessee_pre, texas_pre, utah_pre, vermont_pre, virginia_pre, washington_pre, west_virginia_pre, wisconsin_pre, wyoming_pre]
+
+states_post = [alabama_post, alaska_post, arizona_post, arkansas_post, california_post, colorado_post, connecticut_post, delaware_post, dc_post, florida_post, georgia_post,
+          hawaii_post, idaho_post, illinois_post, indiana_post, iowa_post, kansas_post, kentucky_post, louisiana_post, maine_post, maryland_post, massachusetts_post,
+          michigan_post, minnesota_post, mississippi_post, missouri_post, montana_post, nebraska_post, nevada_post, new_hampshire_post, new_jersey_post, new_mexico_post,
+          new_york_post, north_carolina_post, north_dakota_post, ohio_post, oklahoma_post, oregon_post, pennsylvania_post, rhode_island_post, south_carolina_post,
+          south_dakota_post, tennessee_post, texas_post, utah_post, vermont_post, virginia_post, washington_post, west_virginia_post, wisconsin_post, wyoming_post]
+
