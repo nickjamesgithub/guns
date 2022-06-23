@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mj_wasserstein_utilities import changepoint_probabilities_plot, mj_wasserstein, dendrogram_plot, changepoint_probabilities, dendrogram_plot_test, transitivity_test, plot_3d_mj_wasserstein
 
-make_plots = False
+make_plots = True
 
+# Read in guns data
 guns = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/Gun_events_220610.csv", index_col='Date')
+
 # Get column names
 column_names = guns.columns
 
@@ -18,7 +20,7 @@ california_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec
 colorado_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Colorado_pre_estimates.csv")
 connecticut_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Connecticut_pre_estimates.csv")
 delaware_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Delaware_pre_estimates.csv")
-dc_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/District.of.Columbia_pre_estimates.csv")
+dc_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/District of Columbia_pre_estimates.csv")
 florida_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Florida_pre_estimates.csv")
 georgia_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Georgia_pre_estimates.csv")
 hawaii_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Hawaii_pre_estimates.csv")
@@ -39,26 +41,26 @@ missouri_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1
 montana_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Montana_pre_estimates.csv")
 nebraska_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Nebraska_pre_estimates.csv")
 nevada_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Nevada_pre_estimates.csv")
-new_hampshire_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Hampshire_pre_estimates.csv")
-new_jersey_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Jersey_pre_estimates.csv")
-new_mexico_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Mexico_pre_estimates.csv")
-new_york_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.York_pre_estimates.csv")
-north_carolina_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North.Carolina_pre_estimates.csv")
-north_dakota_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North.Dakota_pre_estimates.csv")
+new_hampshire_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Hampshire_pre_estimates.csv")
+new_jersey_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Jersey_pre_estimates.csv")
+new_mexico_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Mexico_pre_estimates.csv")
+new_york_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New York_pre_estimates.csv")
+north_carolina_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North Carolina_pre_estimates.csv")
+north_dakota_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North Dakota_pre_estimates.csv")
 ohio_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Ohio_pre_estimates.csv")
 oklahoma_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Oklahoma_pre_estimates.csv")
 oregon_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Oregon_pre_estimates.csv")
 pennsylvania_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Pennsylvania_pre_estimates.csv")
-rhode_island_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Rhode.Island_pre_estimates.csv")
-south_carolina_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South.Carolina_pre_estimates.csv")
-south_dakota_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South.Dakota_pre_estimates.csv")
+rhode_island_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Rhode Island_pre_estimates.csv")
+south_carolina_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South Carolina_pre_estimates.csv")
+south_dakota_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South Dakota_pre_estimates.csv")
 tennessee_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Tennessee_pre_estimates.csv")
 texas_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Texas_pre_estimates.csv")
 utah_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Utah_pre_estimates.csv")
 vermont_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Vermont_pre_estimates.csv")
 virginia_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Virginia_pre_estimates.csv")
 washington_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Washington_pre_estimates.csv")
-west_virginia_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/West.Virginia_pre_estimates.csv")
+west_virginia_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/West Virginia_pre_estimates.csv")
 wisconsin_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wisconsin_pre_estimates.csv")
 wyoming_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wyoming_pre_estimates.csv")
 
@@ -71,7 +73,7 @@ california_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspe
 colorado_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Colorado_post_estimates.csv")
 connecticut_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Connecticut_post_estimates.csv")
 delaware_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Delaware_post_estimates.csv")
-dc_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/District.of.Columbia_post_estimates.csv")
+dc_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/District of Columbia_post_estimates.csv")
 florida_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Florida_post_estimates.csv")
 georgia_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Georgia_post_estimates.csv")
 hawaii_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Hawaii_post_estimates.csv")
@@ -92,39 +94,65 @@ missouri_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-
 montana_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Montana_post_estimates.csv")
 nebraska_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Nebraska_post_estimates.csv")
 nevada_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Nevada_post_estimates.csv")
-new_hampshire_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Hampshire_post_estimates.csv")
-new_jersey_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Jersey_post_estimates.csv")
-new_mexico_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.Mexico_post_estimates.csv")
-new_york_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New.York_post_estimates.csv")
-north_carolina_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North.Carolina_post_estimates.csv")
-north_dakota_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North.Dakota_post_estimates.csv")
+new_hampshire_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Hampshire_post_estimates.csv")
+new_jersey_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Jersey_post_estimates.csv")
+new_mexico_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New Mexico_post_estimates.csv")
+new_york_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/New York_post_estimates.csv")
+north_carolina_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North Carolina_post_estimates.csv")
+north_dakota_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/North Dakota_post_estimates.csv")
 ohio_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Ohio_post_estimates.csv")
 oklahoma_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Oklahoma_post_estimates.csv")
 oregon_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Oregon_post_estimates.csv")
 pennsylvania_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Pennsylvania_post_estimates.csv")
-rhode_island_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Rhode.Island_post_estimates.csv")
-south_carolina_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South.Carolina_post_estimates.csv")
-south_dakota_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South.Dakota_post_estimates.csv")
+rhode_island_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Rhode Island_post_estimates.csv")
+south_carolina_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South Carolina_post_estimates.csv")
+south_dakota_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/South Dakota_post_estimates.csv")
 tennessee_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Tennessee_post_estimates.csv")
 texas_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Texas_post_estimates.csv")
 utah_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Utah_post_estimates.csv")
 vermont_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Vermont_post_estimates.csv")
 virginia_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Virginia_post_estimates.csv")
 washington_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Washington_post_estimates.csv")
-west_virginia_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/West.Virginia_post_estimates.csv")
+west_virginia_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/West Virginia_post_estimates.csv")
 wisconsin_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wisconsin_post_estimates.csv")
 wyoming_post = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Wyoming_post_estimates.csv")
 
-# Set Labels Pre #todo add pre-labels
+# Set Labels Pre
 states_pre = [alabama_pre, alaska_pre, arizona_pre, arkansas_pre, california_pre, colorado_pre, connecticut_pre, delaware_pre, dc_pre, florida_pre, georgia_pre,
           hawaii_pre, idaho_pre, illinois_pre, indiana_pre, iowa_pre, kansas_pre, kentucky_pre, louisiana_pre, maine_pre, maryland_pre, massachusetts_pre,
           michigan_pre, minnesota_pre, mississippi_pre, missouri_pre, montana_pre, nebraska_pre, nevada_pre, new_hampshire_pre, new_jersey_pre, new_mexico_pre,
           new_york_pre, north_carolina_pre, north_dakota_pre, ohio_pre, oklahoma_pre, oregon_pre, pennsylvania_pre, rhode_island_pre, south_carolina_pre,
           south_dakota_pre, tennessee_pre, texas_pre, utah_pre, vermont_pre, virginia_pre, washington_pre, west_virginia_pre, wisconsin_pre, wyoming_pre]
 
+# Set Labels Post
 states_post = [alabama_post, alaska_post, arizona_post, arkansas_post, california_post, colorado_post, connecticut_post, delaware_post, dc_post, florida_post, georgia_post,
           hawaii_post, idaho_post, illinois_post, indiana_post, iowa_post, kansas_post, kentucky_post, louisiana_post, maine_post, maryland_post, massachusetts_post,
           michigan_post, minnesota_post, mississippi_post, missouri_post, montana_post, nebraska_post, nevada_post, new_hampshire_post, new_jersey_post, new_mexico_post,
           new_york_post, north_carolina_post, north_dakota_post, ohio_post, oklahoma_post, oregon_post, pennsylvania_post, rhode_island_post, south_carolina_post,
           south_dakota_post, tennessee_post, texas_post, utah_post, vermont_post, virginia_post, washington_post, west_virginia_post, wisconsin_post, wyoming_post]
+
+# Store differences in Log PSD
+spectral_pre_post_deviation = []
+
+# Loop over states
+for i in range(len(states_pre)):
+    pre_state = states_pre[i].iloc[1:,1]
+    post_state = states_post[i].iloc[1:,1]
+
+    if make_plots:
+        # Plot spectrum before and after
+        plt.plot(np.linspace(0,0.5,len(pre_state)), pre_state, label="Pre-4/20")
+        plt.plot(np.linspace(0,0.5,len(pre_state)), post_state, label="Post-4/20")
+        plt.xlabel("Frequency")
+        plt.ylabel("Log PSD")
+        plt.title(column_names[i])
+        plt.legend()
+        plt.savefig("Spectral_deviation_"+column_names[i])
+        plt.show()
+
+    print("Iteration", column_names[i])
+
+    # Compute L^1 distance between vectors
+    distance = np.sum(np.abs(pre_state - post_state))
+    spectral_pre_post_deviation.append([column_names[i], distance])
 
