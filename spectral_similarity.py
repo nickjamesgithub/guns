@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mj_wasserstein_utilities import changepoint_probabilities_plot, mj_wasserstein, dendrogram_plot, changepoint_probabilities, dendrogram_plot_test, transitivity_test, plot_3d_mj_wasserstein
 
-make_plots = True
+make_plots = False
 
 # Read in guns data
 guns = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/Gun_events_220610.csv", index_col='Date')
@@ -15,17 +15,37 @@ column_names = guns.columns
 state_time_means_pre = []
 state_time_means_post = []
 temporal_mean_deviation = []
+
 for i in range(len(column_names)):
+
     # Slice pre/post 4/20 and compute temporal means
     pre_slice = guns.iloc[:822, i]
     post_slice = guns.iloc[822:, i]
     state_time_means_pre.append(np.mean(pre_slice))
     state_time_means_post.append(np.mean(post_slice))
 
+    # Plot temporal deviation
+    if make_plots:
+        fig, ax = plt.subplots()
+        time_returns = pd.date_range("01-01-2018", "06-09-2022", len(guns))
+        plt.plot(time_returns[:822], pre_slice, label="Events pre-4/20", color='blue', alpha = 0.4)
+        plt.plot(time_returns[822:], post_slice, label="Events post 4/20", color='red', alpha = 0.4)
+        ax.axhline(y=np.mean(pre_slice), xmin=0, xmax=822/1620, color='blue', alpha = 0.4)
+        ax.axhline(y=np.mean(post_slice), xmin=822/1620, xmax = 1, color='red', alpha = 0.4)
+        plt.title(column_names[i])
+        plt.xlabel("Time")
+        plt.ylabel("Events")
+        plt.legend()
+        ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+        plt.savefig("Temporal_mean_deviation_"+column_names[i])
+        plt.show()
+
     # Temporal mean deviation
     temporal_mean_deviation.append([column_names[i], np.abs(np.mean(pre_slice) - np.mean(post_slice))])
 
-block = 1
+# Make difference in means an array and order
+temporal_mean_deviation_array = np.array(temporal_mean_deviation)
+sorted_temporal = temporal_mean_deviation_array[temporal_mean_deviation_array[:,1].argsort()]
 
 # Import States PRE April 2020
 alabama_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Alabama_pre_estimates.csv")
@@ -154,13 +174,13 @@ spectral_pre_post_deviation = []
 for i in range(len(states_pre)):
     pre_state = states_pre[i].iloc[1:,1]
     post_state = states_post[i].iloc[1:,1]
-    pre_state_trajectory = pre_state/np.sum(np.abs(pre_state))
-    post_state_trajectory = post_state / np.sum(np.abs(post_state))
+    pre_state_trajectory = pre_state/(np.sum(np.abs(pre_state)))
+    post_state_trajectory = post_state/(np.sum(np.abs(post_state)))
 
     if make_plots:
         # Plot spectrum before and after
-        plt.plot(np.linspace(0,0.5,len(pre_state)), pre_state_trajectory, label="Pre-4/20")
-        plt.plot(np.linspace(0,0.5,len(pre_state)), post_state_trajectory, label="Post-4/20")
+        plt.plot(np.linspace(0,0.5,len(pre_state_trajectory)), pre_state_trajectory, label="Pre-4/20")
+        plt.plot(np.linspace(0,0.5,len(post_state_trajectory)), post_state_trajectory, label="Post-4/20")
         plt.xlabel("Frequency")
         plt.ylabel("Log PSD")
         plt.title(column_names[i])
@@ -174,7 +194,17 @@ for i in range(len(states_pre)):
     distance = np.sum(np.abs(pre_state_trajectory - post_state_trajectory))
     spectral_pre_post_deviation.append([column_names[i], distance])
 
-# Make array
+# Make array and print sorted spectral deviation
 spectral_pre_post_deviation_array = np.array(spectral_pre_post_deviation)
-sortedArr = spectral_pre_post_deviation_array[spectral_pre_post_deviation_array[:,1].argsort()]
-print(sortedArr)
+sorted_spectral = spectral_pre_post_deviation_array[spectral_pre_post_deviation_array[:,1].argsort()]
+
+# Print sorted temporal mean deviation
+print(sorted_temporal)
+# Print sorted spectral deviation
+print(sorted_spectral)
+
+# Convert to DF and write to csv file
+sorted_temporal_df = pd.DataFrame(sorted_temporal)
+sorted_spectral_df = pd.DataFrame(sorted_spectral)
+sorted_temporal_df.to_csv("/Users/tassjames/Desktop/guns_chaos/sorted_temporal_deviation.csv")
+sorted_spectral_df.to_csv("/Users/tassjames/Desktop/guns_chaos/sorted_spectral_deviation.csv")
