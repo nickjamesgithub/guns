@@ -11,6 +11,22 @@ guns = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/Gun_events_220610.csv", 
 # Get column names
 column_names = guns.columns
 
+# Time domain ranking
+state_time_means_pre = []
+state_time_means_post = []
+temporal_mean_deviation = []
+for i in range(len(column_names)):
+    # Slice pre/post 4/20 and compute temporal means
+    pre_slice = guns.iloc[:822, i]
+    post_slice = guns.iloc[822:, i]
+    state_time_means_pre.append(np.mean(pre_slice))
+    state_time_means_post.append(np.mean(post_slice))
+
+    # Temporal mean deviation
+    temporal_mean_deviation.append([column_names[i], np.abs(np.mean(pre_slice) - np.mean(post_slice))])
+
+block = 1
+
 # Import States PRE April 2020
 alabama_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Alabama_pre_estimates.csv")
 alaska_pre = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/guns_adaptspec-1/results/Alaska_pre_estimates.csv")
@@ -138,11 +154,13 @@ spectral_pre_post_deviation = []
 for i in range(len(states_pre)):
     pre_state = states_pre[i].iloc[1:,1]
     post_state = states_post[i].iloc[1:,1]
+    pre_state_trajectory = pre_state/np.sum(np.abs(pre_state))
+    post_state_trajectory = post_state / np.sum(np.abs(post_state))
 
     if make_plots:
         # Plot spectrum before and after
-        plt.plot(np.linspace(0,0.5,len(pre_state)), pre_state, label="Pre-4/20")
-        plt.plot(np.linspace(0,0.5,len(pre_state)), post_state, label="Post-4/20")
+        plt.plot(np.linspace(0,0.5,len(pre_state)), pre_state_trajectory, label="Pre-4/20")
+        plt.plot(np.linspace(0,0.5,len(pre_state)), post_state_trajectory, label="Post-4/20")
         plt.xlabel("Frequency")
         plt.ylabel("Log PSD")
         plt.title(column_names[i])
@@ -153,6 +171,10 @@ for i in range(len(states_pre)):
     print("Iteration", column_names[i])
 
     # Compute L^1 distance between vectors
-    distance = np.sum(np.abs(pre_state - post_state))
+    distance = np.sum(np.abs(pre_state_trajectory - post_state_trajectory))
     spectral_pre_post_deviation.append([column_names[i], distance])
 
+# Make array
+spectral_pre_post_deviation_array = np.array(spectral_pre_post_deviation)
+sortedArr = spectral_pre_post_deviation_array[spectral_pre_post_deviation_array[:,1].argsort()]
+print(sortedArr)
