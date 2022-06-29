@@ -41,7 +41,7 @@ for i in range(len(column_names)):
         plt.show()
 
     # Temporal mean deviation
-    temporal_mean_deviation.append([column_names[i], np.abs(np.mean(pre_slice) - np.mean(post_slice))])
+    temporal_mean_deviation.append([column_names[i], np.mean(pre_slice) - np.mean(post_slice)])
 
 # Make difference in means an array and order
 temporal_mean_deviation_array = np.array(temporal_mean_deviation)
@@ -169,18 +169,33 @@ states_post = [alabama_post, alaska_post, arizona_post, arkansas_post, californi
 
 # Store differences in Log PSD
 spectral_pre_post_deviation = []
+key_frequency_deviation = []
 
 # Loop over states
 for i in range(len(states_pre)):
+    # Distance b/w mean-adjusted spectra
     pre_state = states_pre[i].iloc[1:,1]
     post_state = states_post[i].iloc[1:,1]
-    pre_state_trajectory = pre_state/(np.sum(np.abs(pre_state)))
-    post_state_trajectory = post_state/(np.sum(np.abs(post_state)))
+    pre_state_mean= pre_state - np.mean(pre_state)
+    post_state_mean = post_state - np.mean(post_state)
+
+    # Distance b/w key frequencies on mean-adjusted spectrum
+    key_index = [0, 1, 2, 6, 14, 28, 56]
+    # Convert key frequencies to array
+    pre_key_freqs = np.array(pre_state_mean)
+    post_key_freqs = np.array(post_state_mean)
+    # Slice key amplitude
+    pre_key_amplitude = np.array([pre_key_freqs[val] for val in key_index])
+    post_key_amplitude = np.array([post_key_freqs[val] for val in key_index])
+
+    # L1 distance in key frequencies
+    l1_key_freq_diffs = np.sum(np.abs(pre_key_amplitude - post_key_amplitude))
+    key_frequency_deviation.append([column_names[i], l1_key_freq_diffs]) # Append to list
 
     if make_plots:
         # Plot spectrum before and after
-        plt.plot(np.linspace(0,0.5,len(pre_state_trajectory)), pre_state_trajectory, label="Pre-4/20")
-        plt.plot(np.linspace(0,0.5,len(post_state_trajectory)), post_state_trajectory, label="Post-4/20")
+        plt.plot(np.linspace(0,0.5,len(pre_state_mean)), pre_state_mean, label="Pre-4/20")
+        plt.plot(np.linspace(0,0.5,len(post_state_mean)), post_state_mean, label="Post-4/20")
         plt.xlabel("Frequency")
         plt.ylabel("Log PSD")
         plt.title(column_names[i])
@@ -191,7 +206,7 @@ for i in range(len(states_pre)):
     print("Iteration", column_names[i])
 
     # Compute L^1 distance between vectors
-    distance = np.sum(np.abs(pre_state_trajectory - post_state_trajectory))
+    distance = np.sum(np.abs(pre_state_mean - post_state_mean))
     spectral_pre_post_deviation.append([column_names[i], distance])
 
 # Make array and print sorted spectral deviation
@@ -206,5 +221,7 @@ print(sorted_spectral)
 # Convert to DF and write to csv file
 sorted_temporal_df = pd.DataFrame(sorted_temporal)
 sorted_spectral_df = pd.DataFrame(sorted_spectral)
-sorted_temporal_df.to_csv("/Users/tassjames/Desktop/guns_chaos/sorted_temporal_deviation.csv")
-sorted_spectral_df.to_csv("/Users/tassjames/Desktop/guns_chaos/sorted_spectral_deviation.csv")
+sorted_key_freqs_df = pd.DataFrame(key_frequency_deviation)
+sorted_temporal_df.to_csv("/Users/tassjames/Desktop/guns_chaos/Ranking_states/sorted_temporal_deviation.csv")
+sorted_spectral_df.to_csv("/Users/tassjames/Desktop/guns_chaos/Ranking_states/sorted_spectral_deviation.csv")
+sorted_key_freqs_df.to_csv("/Users/tassjames/Desktop/guns_chaos/Ranking_states/sorted_key_freqs_deviation.csv")
