@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mj_wasserstein_utilities import changepoint_probabilities_plot, mj_wasserstein, dendrogram_plot, changepoint_probabilities, dendrogram_plot_test, transitivity_test, plot_3d_mj_wasserstein
 
-make_plots = False
+make_plots = True
 
 guns = pd.read_csv("/Users/tassjames/Desktop/guns_chaos/Gun_events_220610.csv", index_col='Date')
 # Get column names
@@ -85,16 +85,16 @@ for i in range(len(labels)):
         distance[i,j] = mj_wasserstein(x_cutpoints, x_probabilities, x_max_prob, y_cutpoints, y_probabilities, y_max_prob)
     print(states[i])
 
-if make_plots:
-    # Distance Matrix
-    plt.matshow(distance)
-    plt.title("Extreme Breaks Distance")
-    cb = plt.colorbar()
-    cb.ax.tick_params(labelsize=10)
-    plt.show()
-
-    # MJ-Wasserstein dendrogram on countries
-    dendrogram_plot_test(distance, "mj_wasserstein_", "_states_events_", labels)
+# if make_plots:
+#     # Distance Matrix
+#     plt.matshow(distance)
+#     plt.title("Extreme Breaks Distance")
+#     cb = plt.colorbar()
+#     cb.ax.tick_params(labelsize=10)
+#     plt.show()
+#
+#     # MJ-Wasserstein dendrogram on countries
+#     dendrogram_plot_test(distance, "mj_wasserstein_", "_states_events_", labels)
 
 # Generate date grid
 time_returns = pd.date_range("01-01-2018","06-09-2022",len(guns))
@@ -108,7 +108,7 @@ def generate_changepoint_plot(time_returns, sector, label):
             plt.axvline(time_returns[cuts[i][j]], color='black', alpha=probs[i][j])
     plt.xlabel("Time")
     plt.ylabel("Gun violence events")
-    plt.title(label+" gun violence event change points")
+    plt.title(label)
     ax.xaxis.set_major_locator(plt.MaxNLocator(5))
     plt.savefig("Gun_violence_"+label)
     plt.show()

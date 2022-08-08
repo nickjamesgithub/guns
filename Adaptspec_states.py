@@ -68,6 +68,12 @@ states = [alabama, alaska, arizona, arkansas, california, colorado, connecticut,
           new_york, north_carolina, north_dakota, ohio, oklahoma, oregon, pennsylvania, rhode_island, south_carolina,
           south_dakota, tennessee, texas, utah, vermont, virginia, washington, west_virginia, wisconsin, wyoming]
 
+# states = [alabama, alaska, arizona, arkansas, california, colorado, connecticut, delaware, dc, florida, georgia,
+#           hawaii, idaho, indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachusetts,
+#          mississippi, missouri, montana, nebraska, nevada, new_hampshire, new_jersey, new_mexico,
+#            north_carolina, north_dakota, ohio, oklahoma, oregon, pennsylvania, rhode_island, south_carolina,
+#           south_dakota, tennessee, texas, utah, vermont, virginia, washington, west_virginia, wyoming]
+
 labels = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "DC",
           "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
           "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana",
@@ -75,17 +81,26 @@ labels = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", 
           "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
           "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
 
+# labels = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "DC",
+#           "Florida", "Georgia", "Hawaii", "Idaho", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+#           "Maine", "Maryland", "Massachusetts","Mississippi", "Missouri", "Montana",
+#           "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "North Carolina", "North Dakota",
+#           "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+#           "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wyoming"]
+
 clustering = True
 
 if clustering:
     # Compute distance between all time-varying power spectra
-    l1_distance_matrix = np.zeros((len(states), len(states))) # Initialise distance matrix
+    l1_distance_matrix = np.zeros((len(labels), len(labels))) # Initialise distance matrix
     for i in range(len(states)):
         for j in range(len(states)):
             city_tvs_i = np.array(states[i].iloc[:,1:])
+            city_tvs_mean_i = city_tvs_i - city_tvs_i.mean(axis=0, keepdims=True)
             city_tvs_j = np.array(states[j].iloc[:,1:])
+            city_tvs_mean_j = city_tvs_j - city_tvs_j.mean(axis=0, keepdims=True)
             # Compute distance between time-varying surface on left and right
-            l1_distance = np.sum(np.abs(city_tvs_i - city_tvs_j))* (1/(100 * len(guns)))
+            l1_distance = np.sum(np.abs(city_tvs_mean_i - city_tvs_mean_j)) * (1/(100 * len(guns)))
             l1_distance_matrix[i,j] = l1_distance
         print("Guns iteration", i)
 
@@ -111,7 +126,8 @@ for i in range(len(states)):
     surf = ax.plot_surface(X, Y, gt_spectrum, cmap=cm.plasma, linewidth=0.25, antialiased=True)
     plt.xlabel("Frequency")
     plt.ylabel("Time")
-    ax.yaxis.set_major_locator(plt.MaxNLocator(4))
+    plt.title(labels[i])
+    ax.yaxis.set_major_locator(plt.MaxNLocator(3))
     ax.set_zlabel("Log PSD")
     plt.savefig("3d_surface"+labels[i])
     plt.show()
